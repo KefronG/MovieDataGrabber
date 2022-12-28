@@ -1,26 +1,11 @@
 import sys
 import requests
 import os
+import Keys
+key1 = Keys.SECERT_KEY1
+key2 = Keys.SECERT_KEY2
 
 folder_path = r'D:/ThatDudeuknow/Home Movies'
-key = ''
-
-
-def imdb_connection(title, year):
-    url = f"https://imdb-api.com/en/API/SearchMovie/{key}/{title} {year}"
-    # {key},{title},{year}
-    response = requests.get(url)
-    if response.status_code != 200:
-        print("fail")
-        sys.exit(-1)
-    jsonresponse = response.json()
-    res = jsonresponse
-    mylist = []
-    mylist.append(res)
-
-
-
-    return mylist
 
 
 def my_movie_dictionary(mydir):
@@ -36,30 +21,43 @@ def my_movie_dictionary(mydir):
     return titles_and_year_of_release
 
 
-def getmovieinfo(id):
-    url = f"https://imdb-api.com/en/API/Movies/{key}/{id}/Posters,Images,Ratings"
+def getmovieinfo(movie_id):
+    url = f"https://api.themoviedb.org/3/movie/{movie_id}?api_key={key2}&language=en-US"
     response = requests.get(url)
-    if response.status_code != 200:
-        print("fail")
-        sys.exit(-1)
     jsonresponse = response.json()
     res = jsonresponse
     print(jsonresponse)
     mylist = []
     mylist.append(res)
     return mylist
+#
+def get_imdb_movie_poster(title, year):
+    url = f"https://imdb-api.com/en/API/SearchMovie/{key1}/{title} {year}"
+    response = requests.get(url)
+    if response.status_code != 200:
+        print("fail")
+        sys.exit(-1)
+    jsonresponse = response.json()
+    res = jsonresponse['results'][0]
+    mylist = []
+    mylist.append(res)
+    return mylist
 
 
 if __name__ == '__main__':
-    print(len(my_movie_dictionary(folder_path)))
+    print(f'Total Movies in Dir {len(my_movie_dictionary(folder_path))}')
     count = 0
+    imdb_ids = []
+    len(my_movie_dictionary(folder_path)) - 1
     for i in range(len(my_movie_dictionary(folder_path)) - 1):
         T = my_movie_dictionary(folder_path)[i][0]
         Y = my_movie_dictionary(folder_path)[i][1]
-        print(T,Y)
-        ID = imdb_connection(T, Y)
-        print(ID)
-        #print(f"IMDB ID: {ID[0]['id']}")
-        #print(f"Movie Poster: {ID[0]['image']}")
+        print(f"{count}. {T} {Y}")
+        ID = get_imdb_movie_poster(T, Y)
+        #print(ID)
+        print(f"IMDB ID: {ID[0]['id']}")
+        imdb_ids.append(ID[0]['id'])
+        print(f"Movie Poster: {ID[0]['image']} \n")
         count +=1
-        print(count)
+
+    getmovieinfo(imdb_ids[0])
