@@ -63,7 +63,7 @@ if __name__ == '__main__':
     count = 0
     imdb_ids = []
     #len(my_movie_dictionary(folder_path)) - 1
-    for i in range(2):
+    for i in range(1):
         T = my_movie_dictionary(folder_path)[i][0]
         Y = my_movie_dictionary(folder_path)[i][1]
         print(f"{count}. {T} {Y}")
@@ -83,6 +83,8 @@ if __name__ == '__main__':
         print(getcredits(imdb_ids[i])[0]['cast'][1]['name'])
         print(getcredits(imdb_ids[i])[0]['cast'][2]['name'])
 
+        #print(f" Executive Producer:  {getcredits(imdb_ids[i])[0]['crew'][0]['name']}")
+
         print("____________________________________________________________________________________________________\n")
 
 
@@ -92,8 +94,7 @@ if __name__ == '__main__':
         count +=1
 
 
-        #producer
-
         #director
+        #print(getcredits(imdb_ids[i])[0])
 
 
