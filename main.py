@@ -2,11 +2,17 @@ import sys
 import requests
 import os
 import Keys
-import json
-import datetime
+from selenium import webdriver
+from PIL import Image
+from pathlib import Path
+
+
+
+import io
 key1 = Keys.SECERT_KEY1
 key2 = Keys.SECERT_KEY2
 folder_path = r'D:/ThatDudeuknow/Home Movies'
+folder_path2 = 'D:\ThatDudeuknow\Home Movies\\'
 
 
 def my_movie_dictionary(mydir):
@@ -19,6 +25,7 @@ def my_movie_dictionary(mydir):
         tempSplit = titles_and_years[cntr - 1].split(')')[0]
         jst_title_and_year = tempSplit.split('(')
         titles_and_year_of_release.append(jst_title_and_year)
+
     return titles_and_year_of_release
 
 def getcredits(movie_id):
@@ -52,29 +59,51 @@ def get_imdb_movie_poster_and_id(title, year):
     mylist = []
     mylist.append(res)
     return mylist
+def download_image(download_path, url, file_name):
+    image_content = requests.get(url).content
+    image_file = io.BytesIO(image_content)
+    image = Image.open(image_file)
 
+
+    file_path = download_path + file_name
+    with open(file_path, "wb") as f:
+        image.save(f,'JPEG')
 
 
 if __name__ == '__main__':
     print(f'Total Movies in Dir {len(my_movie_dictionary(folder_path))} \n')
-    count = 0
+    count = 1
     imdb_ids = []
-    #len(my_movie_dictionary(folder_path)) - 1
-    for i in range(len(my_movie_dictionary(folder_path))):
+    movie_genres = []
+    # len(my_movie_dictionary(folder_path))
+    for i in range(1):
         T = my_movie_dictionary(folder_path)[i][0]
         Y = my_movie_dictionary(folder_path)[i][1]
-        print(f"{count}. {T} {Y}")
+        #{count}.
+        print(f"{T} {Y}")
         ID = get_imdb_movie_poster_and_id(T, Y)
 
         print(f"IMDB ID: {ID[0]['id']}")
         imdb_ids.append(ID[0]['id'])
         print(f"Movie Poster: {ID[0]['image']} \n")
+        img_url = ID[0]['image']
 
-        print(f"Movie genres: {getmovieinfo(imdb_ids[i])[0]['genres']} \n")
-        print(f"Movie overview: {getmovieinfo(imdb_ids[i])[0]['overview']} \n")
-        print(f"Movie runtime: {getmovieinfo(imdb_ids[i])[0]['runtime']} \n")
-        print(f"Movie vote average: {getmovieinfo(imdb_ids[i])[0]['vote_average']} \n")
 
+
+
+        #img_dir = f"{folder_path2}"
+        #download_image(f"{img_dir}/{T[i]} {Y[i]}", img_url,f"{T} {Y} poster.jpg")
+
+
+
+
+
+        genres = getmovieinfo(imdb_ids[i])[0]['genres']
+        print("Genres:")
+        for g in range(len(genres)): print(f"{genres[g]['name']}")
+        print(f"\nOverview: {getmovieinfo(imdb_ids[i])[0]['overview']} \n")
+        print(f"Runtime: {getmovieinfo(imdb_ids[i])[0]['runtime']} \n")
+        print(f"Rating: {getmovieinfo(imdb_ids[i])[0]['vote_average']} \n")
 
         print("Starring: ")
         print(getcredits(imdb_ids[i])[0]['cast'][0]['name'])
@@ -82,6 +111,10 @@ if __name__ == '__main__':
         print(getcredits(imdb_ids[i])[0]['cast'][2]['name'])
 
 
-        print("____________________________________________________________________________________________________\n")
+        directors = [credit for credit in getcredits(imdb_ids[i])[0]['crew'] if credit["job"] == "Director"]
 
-        count +=1
+        for people in range(len(directors)): print(f"\nDirector: {directors[people]['name']}")
+
+
+        print("____________________________________________________________________________________________________\n")
+        count += 1
