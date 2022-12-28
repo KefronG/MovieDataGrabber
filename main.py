@@ -2,10 +2,10 @@ import sys
 import requests
 import os
 import Keys
-import time
+import json
+import datetime
 key1 = Keys.SECERT_KEY1
 key2 = Keys.SECERT_KEY2
-
 folder_path = r'D:/ThatDudeuknow/Home Movies'
 
 
@@ -52,9 +52,6 @@ def get_imdb_movie_poster_and_id(title, year):
     mylist = []
     mylist.append(res)
     return mylist
-#time.sleep(12) TMDB 40 request every 10 secs so count the number of request at for sleep for 12 sec
-
-
 
 
 
@@ -63,7 +60,7 @@ if __name__ == '__main__':
     count = 0
     imdb_ids = []
     #len(my_movie_dictionary(folder_path)) - 1
-    for i in range(1):
+    for i in range(len(my_movie_dictionary(folder_path))):
         T = my_movie_dictionary(folder_path)[i][0]
         Y = my_movie_dictionary(folder_path)[i][1]
         print(f"{count}. {T} {Y}")
@@ -78,23 +75,13 @@ if __name__ == '__main__':
         print(f"Movie runtime: {getmovieinfo(imdb_ids[i])[0]['runtime']} \n")
         print(f"Movie vote average: {getmovieinfo(imdb_ids[i])[0]['vote_average']} \n")
 
+
         print("Starring: ")
         print(getcredits(imdb_ids[i])[0]['cast'][0]['name'])
         print(getcredits(imdb_ids[i])[0]['cast'][1]['name'])
         print(getcredits(imdb_ids[i])[0]['cast'][2]['name'])
 
-        #print(f" Executive Producer:  {getcredits(imdb_ids[i])[0]['crew'][0]['name']}")
 
         print("____________________________________________________________________________________________________\n")
 
-
-
-
-
         count +=1
-
-
-        #director
-        #print(getcredits(imdb_ids[i])[0])
-
-
