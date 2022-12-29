@@ -5,14 +5,15 @@ import Keys
 from selenium import webdriver
 from PIL import Image
 from pathlib import Path
+import io
 
 
 
 import io
 key1 = Keys.SECERT_KEY1
 key2 = Keys.SECERT_KEY2
-folder_path = r'D:/ThatDudeuknow/Home Movies'
-folder_path2 = 'D:\ThatDudeuknow\Home Movies\\'
+folder_path = 'D:/ThatDudeuknow/Home Movies/'
+
 
 
 def my_movie_dictionary(mydir):
@@ -65,6 +66,7 @@ def download_image(download_path, url, file_name):
     image = Image.open(image_file)
 
 
+
     file_path = download_path + file_name
     with open(file_path, "wb") as f:
         image.save(f,'JPEG')
@@ -79,20 +81,16 @@ if __name__ == '__main__':
     for i in range(1):
         T = my_movie_dictionary(folder_path)[i][0]
         Y = my_movie_dictionary(folder_path)[i][1]
-        #{count}.
-        print(f"{T} {Y}")
+        print(f"{count}.", f"{T} {Y}")
         ID = get_imdb_movie_poster_and_id(T, Y)
 
         print(f"IMDB ID: {ID[0]['id']}")
         imdb_ids.append(ID[0]['id'])
         print(f"Movie Poster: {ID[0]['image']} \n")
         img_url = ID[0]['image']
-
-
-
-
-        #img_dir = f"{folder_path2}"
-        #download_image(f"{img_dir}/{T[i]} {Y[i]}", img_url,f"{T} {Y} poster.jpg")
+        img_dir = T + "("+Y+")"
+        path_4_posters = "D:/ThatDudeuknow/Home Movies/"+img_dir+"/"
+        download_image(f"{path_4_posters} ", img_url,f"{T}{Y} poster.jpg")
 
 
 
