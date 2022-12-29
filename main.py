@@ -92,10 +92,6 @@ if __name__ == '__main__':
         path_4_posters = "D:/ThatDudeuknow/Home Movies/"+img_dir+"/"
         download_image(f"{path_4_posters} ", img_url,f"{T}{Y} poster.jpg")
 
-
-
-
-
         genres = getmovieinfo(imdb_ids[i])[0]['genres']
         print("Genres:")
         for g in range(len(genres)): print(f"{genres[g]['name']}")
