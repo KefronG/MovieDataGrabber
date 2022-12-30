@@ -6,9 +6,6 @@ from PIL import Image
 import io
 
 
-
-
-
 def my_movie_dictionary(mydir):
     titles_and_years = []
     titles_and_year_of_release = []
@@ -141,8 +138,6 @@ if __name__ == '__main__':
             if  int(crew[c]['popularity']) >= int(ajst_score):
                 cast.append(crew[c])
         for c in range(len(cast)): print(cast[c]['name'])
-
-
 
         directors = [credit for credit in getcredits(imdb_ids[i])[0]['crew'] if credit["job"] == "Director"]
 
