@@ -126,8 +126,12 @@ def download_image(download_path, url, file_name):
     with open(file_path, "wb") as f:
         image.save(f,'JPEG')
 
-def write_movie_overview():
-    pass
+def write_movie_overview(download_path, overview, file_name):
+    Overview = overview
+    file_path = download_path + file_name
+    with open(file_path, "w") as f:
+        f.write(Overview)
+
 
 
 
@@ -138,7 +142,7 @@ if __name__ == '__main__':
     imdb_ids = []
     movie_genres = []
     # len(my_movie_dictionary(folder_path))
-    for i in range(len(my_movie_dictionary(folder_path))):
+    for i in range(1):
         T = my_movie_dictionary(folder_path)[i][0]
         Y = my_movie_dictionary(folder_path)[i][1]
         print(f"{count}.", f"{T} {Y}")
@@ -146,19 +150,25 @@ if __name__ == '__main__':
 
         print(f"IMDB ID: {ID[0]['id']}")
         imdb_ids.append(ID[0]['id'])
+
         print(f"Movie Poster: {ID[0]['image']} \n")
         img_url = ID[0]['image']
-
         img_dir = T + "("+Y+")"
         path_4_posters = "D:/ThatDudeuknow/Home Movies/"+img_dir+"/"
         #download_image(f"{path_4_posters} ", img_url,f"{T}{Y} poster.jpg")
 
-        print(f"Age rating: {get_age_rating(imdb_ids[i])}\n")
+        #print(f"Age rating: {get_age_rating(imdb_ids[i])}\n")
 
         genres = getmovieinfo(imdb_ids[i])[0]['genres']
         print("Genres:")
         for g in range(len(genres)): print(f"{genres[g]['name']}")
-        print(f"\nOverview: {getmovieinfo(imdb_ids[i])[0]['overview']} \n")
+
+        overview = getmovieinfo(imdb_ids[i])[0]['overview']
+        print(f"\nOverview: {overview} \n")
+        overview_dir = T + "(" + Y + ")"
+        path_4_overview = "D:/ThatDudeuknow/Home Movies/" + overview_dir + "/"
+        #write_movie_overview(f"{path_4_overview}",overview,f"{T}{Y} overview.txt" )
+
         print(f"Runtime: {getmovieinfo(imdb_ids[i])[0]['runtime']} \n")
         print(f"Viewer rating: {getmovieinfo(imdb_ids[i])[0]['vote_average']} \n")
 
