@@ -1,16 +1,11 @@
 import sys
 import requests
 import os
-import Keys
+import KeysandPaths
 from PIL import Image
-
-
-
-
 import io
-key1 = Keys.SECERT_KEY1
-key2 = Keys.SECERT_KEY2
-folder_path = 'D:/ThatDudeuknow/Home Movies/'
+
+
 
 
 
@@ -29,66 +24,22 @@ def my_movie_dictionary(mydir):
 
 
 def get_age_rating(movie_id):
-    url= f"https://age-ratings.com/api2/s/{movie_id}/de"
+
+    #url = f"https://api.themoviedb.org/3/movie/{movie_id}/release_dates?api_key={KeysandPaths.SECERT_KEY2}"
+    url = f"https://api.themoviedb.org/3/find/{movie_id}?api_key={KeysandPaths.SECERT_KEY2}&external_source=imdb_id"
     response = requests.get(url)
     jsonresponse = response.json()
-    res = jsonresponse
-    print(res)
-    DE = [0,6,12,16,18,100, "16+", 7, "18+", "R21", "10+",11, "NC16","M/6","10A","IIB","M/18", "18A"]
-    IE = ["G", "12A", "15A"]
-    AU =["G", "PG", "MA15+", "M", "R18+", "X18+"]
-    NL =["AL", 6, 9, 12, 16]
-    UK =["U", "PG", "12A", 12, 15, 18,"R18"]
-    TWN = ["청소년 관람불가"]
-    US = ["G","PG","PG-13-R","R","UR"]
-    if res == DE[0]:return US[0]
-    elif res == DE[1]:return US[1]
-    elif res == DE[2]:return US[2]
-    elif res == DE[3]:return US[3]
-    elif res == DE[4]:return US[3]
-    elif res == DE[5]:
-        url = f"https://api.themoviedb.org/3/movie/{movie_id}/release_dates?api_key={key2}"
-        response = requests.get(url)
-        jsonresponse = response.json()
-        res2 = jsonresponse['results'][0]['release_dates'][0]['certification']
-        if res2 == "":return US[4]
-        elif res2 == str(DE[1]):return US[1]
-        elif res2 == str(DE[2]):return US[2]
-        elif res2 == str(DE[3]):return US[3]
-        elif res2 == str(DE[4]):return US[3]
-        elif res2 == str(UK[0]):return US[0]
-        elif res2 == str(UK[2]):return US[2]
-        elif res2 == str(UK[4]):return US[2]
-        elif res2 == str(UK[6]):return US[3]
-        elif res2 == str(NL[0]):return US[0]
-        elif res2 == str(NL[2]):return US[1]
-        elif res2 == str(AU[2]):return US[2]
-        elif res2 == str(AU[3]):return US[3]
-        elif res2 == str(AU[4]):return US[3]
-        elif res2 == str(AU[5]):return US[5]
-        elif res2 == str(IE[1]):return US[2]
-        elif res2 == str(IE[2]):return US[2]
-        elif res2 == str(DE[6]):return US[3]
-        elif res2 == str(DE[7]):return US[3]
-        elif res2 == str(DE[8]):return US[3]
-        elif res2 == str(DE[9]):return US[3]
-        elif res2 == str(DE[9]):return US[2]
-        elif res2 == str(DE[10]):return US[2]
-        elif res2 == TWN[0]:return US[2]
-        elif res2 == str(DE[11]):return US[3]
-        elif res2 == str(DE[12]):return US[1]
-        elif res2 == str(DE[13]):return US[2]
-        elif res2 == str(DE[13]):return US[2]
-        elif res2 == str(DE[14]):return US[3]
-        elif res2 == str(DE[15]):return US[3]
-        else:
-            return res2
-    else:
-        return res
+    res2 = jsonresponse['movie_results'][0]['id']
+    url2 = f"https://api.themoviedb.org/3/movie/{res2}/release_dates?api_key={KeysandPaths.SECERT_KEY2}"
+    response2 = requests.get(url2)
+    jsonresponse2 = response2.json()
+    res3 = jsonresponse2['results']
+    return res3
 
-#:Mid90s  2018
+
+
 def getcredits(movie_id):
-    url = f"https://api.themoviedb.org/3/movie/{movie_id}/credits?api_key={key2}&language=en-US"
+    url = f"https://api.themoviedb.org/3/movie/{movie_id}/credits?api_key={KeysandPaths.SECERT_KEY2}&language=en-US"
     response = requests.get(url)
     jsonresponse = response.json()
     res = jsonresponse
@@ -99,7 +50,7 @@ def getcredits(movie_id):
 
 
 def getmovieinfo(movie_id):
-    url = f"https://api.themoviedb.org/3/movie/{movie_id}?api_key={key2}&language=en-US"
+    url = f"https://api.themoviedb.org/3/movie/{movie_id}?api_key={KeysandPaths.SECERT_KEY2}&language=en-US"
     response = requests.get(url)
     jsonresponse = response.json()
     res = jsonresponse
@@ -108,7 +59,7 @@ def getmovieinfo(movie_id):
     return mylist
 #
 def get_imdb_movie_poster_and_id(title, year):
-    url = f"https://imdb-api.com/en/API/SearchMovie/{key1}/{title} {year}"
+    url = f"https://imdb-api.com/en/API/SearchMovie/{KeysandPaths.SECERT_KEY1}/{title} {year}"
     response = requests.get(url)
     if response.status_code != 200:
         print("fail")
@@ -137,14 +88,14 @@ def write_movie_overview(download_path, overview, file_name):
 
 
 if __name__ == '__main__':
-    print(f'Total Movies in Home Movies Folder {len(my_movie_dictionary(folder_path))} \n')
+    print(f'Total Movies in Home Movies Folder {len(my_movie_dictionary(KeysandPaths.rtnfolder_path()))} \n')
     count = 1
     imdb_ids = []
     movie_genres = []
-    # len(my_movie_dictionary(folder_path))
-    for i in range(1):
-        T = my_movie_dictionary(folder_path)[i][0]
-        Y = my_movie_dictionary(folder_path)[i][1]
+    # len(my_movie_dictionary(KeysandPaths.rtnfolder_path()))
+    for i in range(len(my_movie_dictionary(KeysandPaths.rtnfolder_path()))):
+        T = my_movie_dictionary(KeysandPaths.rtnfolder_path())[i][0]
+        Y = my_movie_dictionary(KeysandPaths.rtnfolder_path())[i][1]
         print(f"{count}.", f"{T} {Y}")
         ID = get_imdb_movie_poster_and_id(T, Y)
 
@@ -154,10 +105,32 @@ if __name__ == '__main__':
         print(f"Movie Poster: {ID[0]['image']} \n")
         img_url = ID[0]['image']
         img_dir = T + "("+Y+")"
-        path_4_posters = "D:/ThatDudeuknow/Home Movies/"+img_dir+"/"
+        path_4_posters = KeysandPaths.rtnpath_4_posters(img_dir)
         #download_image(f"{path_4_posters} ", img_url,f"{T}{Y} poster.jpg")
 
-        #print(f"Age rating: {get_age_rating(imdb_ids[i])}\n")
+
+
+
+
+        age_rating_certification = [rating for rating in get_age_rating(imdb_ids[i]) if rating["iso_3166_1"] == "US"]
+        rating = []
+        if age_rating_certification == []:
+            rating.append('NR')
+        else:
+            age_rating = [rating for rating in age_rating_certification[0]['release_dates'] if rating['certification']]
+            for r in range(len(age_rating)): rating.append(age_rating[r]['certification'])
+            if age_rating  == []:
+                rating.append('NR')
+        print(f"Age rating: {rating[0]}\n")
+
+
+
+
+
+
+
+
+
 
         genres = getmovieinfo(imdb_ids[i])[0]['genres']
         print("Genres:")
@@ -166,7 +139,7 @@ if __name__ == '__main__':
         overview = getmovieinfo(imdb_ids[i])[0]['overview']
         print(f"\nOverview: {overview} \n")
         overview_dir = T + "(" + Y + ")"
-        path_4_overview = "D:/ThatDudeuknow/Home Movies/" + overview_dir + "/"
+        path_4_overview = KeysandPaths.rtnpath_4_overview(overview_dir)
         #write_movie_overview(f"{path_4_overview}",overview,f"{T}{Y} overview.txt" )
 
         print(f"Runtime: {getmovieinfo(imdb_ids[i])[0]['runtime']} \n")
