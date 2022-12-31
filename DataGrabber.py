@@ -6,11 +6,11 @@ from PIL import Image
 import io
 
 
-def my_movie_dictionary(mydir):
+def my_movie_dictionary(my_dir):
     titles_and_years = []
     titles_and_year_of_release = []
     cntr = 0
-    for files in os.listdir(mydir):
+    for files in os.listdir(my_dir):
         cntr += 1
         titles_and_years.append(files)
         temp_split = titles_and_years[cntr - 1].split(')')[0]
@@ -82,9 +82,8 @@ if __name__ == '__main__':
     count = 1
     imdb_ids = []
 
-    # len(my_movie_dictionary(KeysandPaths.rtnfolder_path()))
     # For each Movie In my home movies folder get:
-    for i in range(10):
+    for i in range(len(my_movie_dictionary(KeysandPaths.rtnfolder_path()))):
 
         # Title and Year
         T = my_movie_dictionary(KeysandPaths.rtnfolder_path())[i][0]
@@ -146,10 +145,10 @@ if __name__ == '__main__':
         for c in range(len(crew_scores)):
             pop_score.append(crew_scores[c]['popularity'])
         pop_score.sort()
-        ajst_score = pop_score[len(pop_score) - 1] / 2
+        mod_score = pop_score[len(pop_score) - 1] / 2
         cast = []
         for c in range(len(crew)):
-            if int(crew[c]['popularity']) >= int(ajst_score):
+            if int(crew[c]['popularity']) >= int(mod_score):
                 cast.append(crew[c])
         for c in range(len(cast)):
             print(cast[c]['name'])
