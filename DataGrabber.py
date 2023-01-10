@@ -19,6 +19,63 @@ def my_movie_dictionary(my_dir):
     return titles_and_year_of_release
 
 
+def get_imdb_movie_poster_and_id(title, year):
+    url = f"https://imdb-api.com/en/API/SearchMovie/{KeysandPaths.SECERT_KEY1}/{title} {year}"
+    response = requests.get(url)
+    if response.status_code != 200:
+        print("fail")
+        sys.exit(-1)
+    json_response = response.json()
+    res = json_response['results'][0]
+
+
+
+
+
+
+
+
+
+
+
+    mylist = [res]
+    return mylist
+
+def getmovieinfo(movie_id):
+    url = f"https://api.themoviedb.org/3/movie/{movie_id}?api_key={KeysandPaths.SECERT_KEY2}&language=en-US"
+    response = requests.get(url)
+    json_response = response.json()
+    res = json_response
+
+
+
+
+
+
+
+
+    mylist = [res]
+    return mylist
+
+
+def get_credits(movie_id):
+    url = f"https://api.themoviedb.org/3/movie/{movie_id}/credits?api_key={KeysandPaths.SECERT_KEY2}&language=en-US"
+    response = requests.get(url)
+    json_response = response.json()
+    res = json_response
+    mylist = [res]
+
+
+
+
+
+
+
+
+    return mylist
+
+
+
 def get_age_rating(movie_id):
     url = f"https://api.themoviedb.org/3/find/{movie_id}?api_key={KeysandPaths.SECERT_KEY2}&external_source=imdb_id"
     response = requests.get(url)
@@ -28,38 +85,19 @@ def get_age_rating(movie_id):
     response2 = requests.get(url2)
     json_response2 = response2.json()
     res3 = json_response2['results']
+
+
+
+
+
+
+
+
+
+
+
     return res3
 
-
-def get_credits(movie_id):
-    url = f"https://api.themoviedb.org/3/movie/{movie_id}/credits?api_key={KeysandPaths.SECERT_KEY2}&language=en-US"
-    response = requests.get(url)
-    json_response = response.json()
-    res = json_response
-    mylist = [res]
-    return mylist
-
-
-def getmovieinfo(movie_id):
-    url = f"https://api.themoviedb.org/3/movie/{movie_id}?api_key={KeysandPaths.SECERT_KEY2}&language=en-US"
-    response = requests.get(url)
-    json_response = response.json()
-    res = json_response
-    mylist = [res]
-    return mylist
-
-
-#
-def get_imdb_movie_poster_and_id(title, year):
-    url = f"https://imdb-api.com/en/API/SearchMovie/{KeysandPaths.SECERT_KEY1}/{title} {year}"
-    response = requests.get(url)
-    if response.status_code != 200:
-        print("fail")
-        sys.exit(-1)
-    json_response = response.json()
-    res = json_response['results'][0]
-    mylist = [res]
-    return mylist
 
 
 def download_image(download_path, url, file_name):
@@ -71,10 +109,24 @@ def download_image(download_path, url, file_name):
         image.save(f, 'JPEG')
 
 
+
+
+
+
+
+
+
 def write_movie_overview(download_path, m_overview, file_name):
     file_path = download_path + file_name
     with open(file_path, "w") as f:
         f.write(m_overview)
+
+
+
+
+
+
+
 
 
 if __name__ == '__main__':
@@ -83,7 +135,8 @@ if __name__ == '__main__':
     imdb_ids = []
 
     # For each Movie In my home movies folder get:
-    for i in range(len(my_movie_dictionary(KeysandPaths.rtnfolder_path()))):
+    #len(my_movie_dictionary(KeysandPaths.rtnfolder_path()))
+    for i in range(1):
 
         # Title and Year
         T = my_movie_dictionary(KeysandPaths.rtnfolder_path())[i][0]
