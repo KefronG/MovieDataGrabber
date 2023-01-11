@@ -20,13 +20,13 @@ class Movie(Base):
 
     Movie_ID = Column("Movie_ID", Integer, primary_key=True, unique=True)
     Title = Column("Title", String)
-    Year = Column("Release Year", Integer)
+    Year = Column("Release_Year", Integer)
     IMDB_ID = Column("IMDB_ID", Integer)
     Poster_Dir = Column("Poster_Dir", String)
     Overview_Dir = Column("Overview_Dir", String)
     Subtitle_Dir = Column("Subtitle_Dir", String)
     Age_rating = Column("Age_rating", String)
-    Viewer_rating = Column("Viewer_rating out of 10", Integer)
+    Viewer_rating = Column("Viewer_rating_out_of_10", Integer)
     Runtime = Column("Runtime", Integer)
 
     def __int__(self, movie_id, title, year, imbd_id, poster_dir, Overview_Dir, Subtitle_Dir, Age_rating, Viewer_rating,
@@ -52,7 +52,7 @@ class Actor(Base):
     Actor_ID = Column("Actor_ID", Integer, primary_key=True)
     Movie_ID = Column(Integer, ForeignKey("Movies.Movie_ID"))
     Actor_name = Column("Actor_Name", String)
-    popularity = Column("popularity score out of 100", Integer)
+    popularity = Column("popularity_score_out_of_100", Integer)
 
     def __int__(self, actor_id, movie_id, actor_name, popularity):
         self.Actor_ID = actor_id
@@ -122,8 +122,8 @@ count = 1
 imdb_ids = []
 
 # For each Movie In my home movies folder get:
-# len(my_movie_dictionary(KeysandPaths.rtnfolder_path()))
-for i in range(30):
+# len(DataGrabber.my_movie_dictionary(KeysandPaths.rtnfolder_path()))
+for i in range(len(DataGrabber.my_movie_dictionary(KeysandPaths.rtnfolder_path()))):
 
     # Title and Year
     T = DataGrabber.my_movie_dictionary(KeysandPaths.rtnfolder_path())[i][0]

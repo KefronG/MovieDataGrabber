@@ -31,15 +31,16 @@ def get_imdb_movie_poster_and_id(title, year):
     mylist = [res]
     return mylist
 
+
 def getmovieinfo(movie_id):
     url = f"https://api.themoviedb.org/3/movie/{movie_id}?api_key={KeysandPaths.SECERT_KEY2}&language=en-US"
     response = requests.get(url)
     json_response = response.json()
     res = json_response
 
-
     mylist = [res]
     return mylist
+
 
 def get_credits(movie_id):
     url = f"https://api.themoviedb.org/3/movie/{movie_id}/credits?api_key={KeysandPaths.SECERT_KEY2}&language=en-US"
@@ -49,7 +50,6 @@ def get_credits(movie_id):
     mylist = [res]
 
     return mylist
-
 
 
 def get_age_rating(movie_id):
@@ -65,7 +65,6 @@ def get_age_rating(movie_id):
     return res3
 
 
-
 def download_image(download_path, url, file_name):
     image_content = requests.get(url).content
     image_file = io.BytesIO(image_content)
@@ -79,6 +78,3 @@ def write_movie_overview(download_path, m_overview, file_name):
     file_path = download_path + file_name
     with open(file_path, "w") as f:
         f.write(m_overview)
-
-
-
