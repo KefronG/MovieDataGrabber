@@ -1,23 +1,24 @@
-from sqlalchemy import create_engine, ForeignKey, Column, String, Integer, CHAR
+from sqlalchemy import create_engine, ForeignKey, Column, String, Integer
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
 
 import DataGrabber
 import KeysandPaths
 
-#Outline Movie table has an ID, title, year of release, IMDB ID, poster directory, overview text file directory, may or
-#may not have an age rating and viewer rating, but has a runtime, and actor IDs and director IDs and genre IDS
-#actor names can be returned using ID as well as Directors and genre types. A movie must have actors and directors and
-#at least 1 genre, actors may or may not have a movie ID which represant movie they where in, A director must have a
-#movie ID to be a director and finally Genres may or may not have a movie ID.
+# Outline Movie table has an ID, title, year of release, IMDB ID, poster directory, overview text file directory, may or
+# may not have an age rating and viewer rating, but has a runtime, and actor IDs and director IDs and genre IDS
+# actor names can be returned using ID as well as Directors and genre types. A movie must have actors and directors and
+# at least 1 genre, actors may or may not have a movie ID which represent movie they were in, A director must have a
+# movie ID to be a director and finally Genres may or may not have a movie ID.
 
 
 Base = declarative_base()
 
+
 class Movie(Base):
     __tablename__ = "Movies"
 
-    Movie_ID = Column("Movie_ID", Integer, primary_key=True,  unique=True)
+    Movie_ID = Column("Movie_ID", Integer, primary_key=True, unique=True)
     Title = Column("Title", String)
     Year = Column("Release Year", Integer)
     IMDB_ID = Column("IMDB_ID", Integer)
@@ -28,13 +29,13 @@ class Movie(Base):
     Viewer_rating = Column("Viewer_rating out of 10", Integer)
     Runtime = Column("Runtime", Integer)
 
-    def __int__(self, Movie_ID, Title,  Year, IMDB_ID, Poster_Dir, Overview_Dir, Subtitle_Dir, Age_rating, Viewer_rating,
+    def __int__(self, movie_id, title, year, imbd_id, poster_dir, Overview_Dir, Subtitle_Dir, Age_rating, Viewer_rating,
                 Runtime):
-        self.Movie_ID = Movie_ID
-        self.Title = Title
-        self.Year = Year
-        self.IMDB_ID = IMDB_ID
-        self.Poster_Dir = Poster_Dir
+        self.Movie_ID = movie_id
+        self.Title = title
+        self.Year = year
+        self.IMDB_ID = imbd_id
+        self.Poster_Dir = poster_dir
         self.Overview_Dir = Overview_Dir
         self.Subtitle_Dir = Subtitle_Dir
         self.Age_rating = Age_rating
@@ -46,7 +47,6 @@ class Movie(Base):
                f" {self.Subtitle_Dir} {self.Age_rating} {self.Viewer_rating} {self.Runtime}"
 
 
-
 class Actor(Base):
     __tablename__ = "Actors"
     Actor_ID = Column("Actor_ID", Integer, primary_key=True)
@@ -54,16 +54,14 @@ class Actor(Base):
     Actor_name = Column("Actor_Name", String)
     popularity = Column("popularity score out of 100", Integer)
 
-    def __int__(self, Actor_ID, Movie_ID, Actor_name, popularity):
-        self.Actor_ID = Actor_ID
-        self.Movie_ID = Movie_ID
-        self.Actor_name = Actor_name
+    def __int__(self, actor_id, movie_id, actor_name, popularity):
+        self.Actor_ID = actor_id
+        self.Movie_ID = movie_id
+        self.Actor_name = actor_name
         self.popularity = popularity
-
 
     def __repr__(self):
         return f"({self.Actor_ID}) {self.Movie_ID} {self.Actor_name} {self.popularity}"
-
 
 
 class Director(Base):
@@ -72,10 +70,10 @@ class Director(Base):
     Movie_ID = Column(Integer, ForeignKey("Movies.Movie_ID"))
     Director_name = Column("Director_name", String)
 
-    def __int__(self, Director_ID, Movie_ID, Director_name):
-        self.Director_ID = Director_ID
-        self.Movie_ID =Movie_ID
-        self.Director_name = Director_name
+    def __int__(self, director_id, movie_id, director_name):
+        self.Director_ID = director_id
+        self.Movie_ID = movie_id
+        self.Director_name = director_name
 
     def __repr__(self):
         return f"({self.Director_ID}) {self.Movie_ID} {self.Director_name}"
@@ -87,10 +85,10 @@ class Genre(Base):
     Movie_ID = Column(Integer, ForeignKey("Movies.Movie_ID"))
     Genre_name = Column("Genre_name", String)
 
-    def __int__(self, Genre_ID, Movie_ID, Genre_name):
-        self.Genre_ID = Genre_ID
-        self.Movie_ID =Movie_ID
-        self.Genre_name =Genre_name
+    def __int__(self, genre_id, movie_id, genre_name):
+        self.Genre_ID = genre_id
+        self.Movie_ID = movie_id
+        self.Genre_name = genre_name
 
     def __repr__(self, ):
         return f"({self.Genre_ID}) {self.Movie_ID} {self.Genre_name}"
@@ -100,12 +98,12 @@ class User(Base):
     __tablename__ = "Users"
     User_ID = Column("User_ID", Integer, primary_key=True, unique=True)
     User_Name = Column("User_Name", String)
-    email = Column("Email", String,unique=True)
+    email = Column("Email", String, unique=True)
     password = Column("Password", String)
 
-    def __int__(self, User_ID, User_Name, email, password):
-        self.User_ID = User_ID
-        self.User_Name = User_Name
+    def __int__(self, user_id, user_name, email, password):
+        self.User_ID = user_id
+        self.User_Name = user_name
         self.email = email
         self.password = password
 
@@ -119,7 +117,7 @@ Base.metadata.create_all(bind=engine)
 Session = sessionmaker(bind=engine)
 session = Session()
 
-print(f'Total Movies in Home Movies Folder {len( DataGrabber.my_movie_dictionary(KeysandPaths.rtnfolder_path()))} \n')
+print(f'Total Movies in Home Movies Folder {len(DataGrabber.my_movie_dictionary(KeysandPaths.rtnfolder_path()))} \n')
 count = 1
 imdb_ids = []
 
@@ -129,9 +127,9 @@ for i in range(30):
 
     # Title and Year
     T = DataGrabber.my_movie_dictionary(KeysandPaths.rtnfolder_path())[i][0]
-    Y =  DataGrabber.my_movie_dictionary(KeysandPaths.rtnfolder_path())[i][1]
+    Y = DataGrabber.my_movie_dictionary(KeysandPaths.rtnfolder_path())[i][1]
     print(f"{count}.", f"{T} {Y}")
-    ID =  DataGrabber.get_imdb_movie_poster_and_id(T, Y)
+    ID = DataGrabber.get_imdb_movie_poster_and_id(T, Y)
 
     # IMDB ID
     print(f"IMDB ID: {ID[0]['id']}")
@@ -145,7 +143,8 @@ for i in range(30):
     # download_image(f"{path_4_posters} ", img_url,f"{T}{Y} poster.jpg")
 
     # Age rating
-    age_rating_certification = [rating for rating in  DataGrabber.get_age_rating(imdb_ids[i]) if rating["iso_3166_1"] == "US"]
+    age_rating_certification = [rating for rating in DataGrabber.get_age_rating(imdb_ids[i]) if rating["iso_3166_1"]
+                                == "US"]
     rating = []
     if not age_rating_certification:
         rating.append('NR')
@@ -159,7 +158,7 @@ for i in range(30):
 
     # Genres
     movie_genres = []
-    genres =  DataGrabber.getmovieinfo(imdb_ids[i])[0]['genres']
+    genres = DataGrabber.getmovieinfo(imdb_ids[i])[0]['genres']
     print("Genres:")
     for g in range(len(genres)):
         movie_genres.append(genres[g]['name'])
@@ -167,7 +166,7 @@ for i in range(30):
         print(movie_genres[g])
 
     # Overview
-    overview =  DataGrabber.getmovieinfo(imdb_ids[i])[0]['overview']
+    overview = DataGrabber.getmovieinfo(imdb_ids[i])[0]['overview']
     print(f"\nOverview: {overview} \n")
     overview_dir = T + "(" + Y + ")"
     path_4_overview = KeysandPaths.rtnpath_4_overview(overview_dir)
@@ -200,7 +199,8 @@ for i in range(30):
 
     # Directors
     Directors = []
-    lst_directors = [credit for credit in  DataGrabber.get_credits(imdb_ids[i])[0]['crew'] if credit["job"] == "Director"]
+    lst_directors = [credit for credit in DataGrabber.get_credits(imdb_ids[i])[0]['crew'] if credit["job"] == "Director"
+                     ]
     for people in range(len(lst_directors)):
         Directors.append(lst_directors[people]['name'])
     for name in range(len(lst_directors)):
@@ -217,18 +217,13 @@ for i in range(30):
         actor = Actor(Movie_ID=movie.Movie_ID, Actor_name=cast[c]['name'], popularity=int(crew[c]['popularity']))
         session.add(actor)
 
-
     for d in range(len(Directors)):
         director = Director(Movie_ID=movie.Movie_ID, Director_name=Directors[d])
         session.add(director)
 
-
     for g in range(len(movie_genres)):
         genre = Genre(Movie_ID=movie.Movie_ID, Genre_name=movie_genres[g])
         session.add(genre)
-
-
-
 
     count += 1
 user = User(User_Name="My_name", email="MyEmail@gmail.com", password="password123")
